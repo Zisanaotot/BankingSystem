@@ -7,19 +7,40 @@ package BankingSystem;
 public class Account {
     
     private String accountName;  // Name of account
-    private int accountNumber;  // Account number
+    private long accountNumber;  // Account number
     private double Balance;  // Balance of account
+    private double previousTransaction;
     
-    /**
+        /**
      *
      * @param name
      * @param number
      * @param initialBalance
      */
-    public Account(String name, int number, double initialBalance) {
+    public Account(String name, Long number, double initialBalance) {
         this.accountName = name;
         this.accountNumber = number;
         this.Balance = initialBalance;  
+    }
+    
+    void getPreviousTransaction(){
+        if (previousTransaction > 0.00){
+            System.out.println("Deposited: $" + getTransaction() + " into account number " + getNumber());
+        }
+        else if (previousTransaction < 0.00){
+            System.out.println("Withdrawn: $" + Math.abs(getTransaction()) + " from account number " + getNumber());
+        }
+        else {
+            System.out.println("No transaction occurred");
+        }
+    }
+
+    /**
+     *
+     * @return previous transaction made
+     */
+    public double getTransaction(){
+        return previousTransaction;
     }
     
     /**
@@ -34,8 +55,8 @@ public class Account {
      * Getter for account number
      * @return
      */
-    public int getNumber(){
-        return accountNumber;
+    public long getNumber(){
+        return this.accountNumber;
     }
 
     /**
@@ -55,11 +76,12 @@ public class Account {
      */
     boolean withdraw(double amount){
         if (amount <= 0 || amount > Balance) {
-            System.out.println("Error: please enter a valid number");
+            System.out.println("Error: Insufficient funds available.");
             return false;
         }
         else {
             Balance = Balance - amount;
+            previousTransaction = -amount;
             return true;
         }
     }
@@ -77,6 +99,7 @@ public class Account {
         }
         else {
             this.Balance = Balance + amount;
+            previousTransaction = amount;
             return true;
         }
     }
